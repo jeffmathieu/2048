@@ -1,5 +1,6 @@
 package com.jeffmathieu.game;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,7 +13,6 @@ public class Board {
 
     public Board() {
         this.grid = new Tile[SIZE][SIZE];
-        //testGrid();
         spawnRandomTile();
     }
 
@@ -188,4 +188,31 @@ public class Board {
         return gained;
     }
 
+    public boolean hasAvailableMoves() {
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                if (grid[r][c] == null) {
+                    return true;
+                }
+            }
+        }
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                int v = grid[r][c].getValue();
+                if (c < SIZE - 1 && grid[r][c + 1].getValue() == v) {
+                    return true;
+                }
+                if (r < SIZE - 1 && grid[r + 1][c].getValue() == v) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void restart() {
+        clearGrid();
+        spawnRandomTile();
+        spawnRandomTile();
+    }
 }

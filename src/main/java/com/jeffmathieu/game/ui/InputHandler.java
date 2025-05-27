@@ -17,21 +17,25 @@ public class InputHandler extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                game.move(Direction.UP);
-                break;
-            case KeyEvent.VK_RIGHT:
-                game.move(Direction.RIGHT);
-                break;
-            case KeyEvent.VK_DOWN:
-                game.move(Direction.DOWN);
-                break;
-            case KeyEvent.VK_LEFT:
-                game.move(Direction.LEFT);
-                break;
-            default:
-                break;
+        if (!game.isGameOver()) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                    game.move(Direction.UP);
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    game.move(Direction.RIGHT);
+                    break;
+                case KeyEvent.VK_DOWN:
+                    game.move(Direction.DOWN);
+                    break;
+                case KeyEvent.VK_LEFT:
+                    game.move(Direction.LEFT);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            game.restart();
         }
         gamePanel.repaint();
     }

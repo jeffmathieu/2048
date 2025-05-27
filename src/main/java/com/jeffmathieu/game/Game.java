@@ -5,9 +5,9 @@ public class Game {
     private int score;
 
     public Game() {
-        board = new Board();
-        score = 0;
-        board.spawnRandomTile();
+        this.board = new Board();
+        this.score = 0;
+        this.board.spawnRandomTile();
     }
 
     public Board getBoard() {
@@ -24,5 +24,13 @@ public class Game {
             score += res.getPointsGained();
             board.spawnRandomTile();
         }
+    }
+
+    public boolean isGameOver() {
+        return !board.hasAvailableMoves();
+    }
+
+    public void restart() {
+        board.restart();
     }
 }

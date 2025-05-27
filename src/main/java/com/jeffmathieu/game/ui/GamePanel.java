@@ -14,7 +14,6 @@ public class GamePanel extends JPanel {
 
     private static final int PADDING = 10;
     private static final int CELL_PADDING = 10;
-    private static final int PREF_SIZE = 500;
 
 
     public GamePanel() {
@@ -73,6 +72,16 @@ public class GamePanel extends JPanel {
                     g2.drawString(s, tx, ty);
                 }
             }
+        }
+        if(game.isGameOver()) {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Game Over!\nYour score: " + game.getScore() + ". Press enter to restart the game!",
+                        "2048",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            });
         }
     }
 
