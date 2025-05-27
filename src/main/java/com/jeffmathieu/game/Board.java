@@ -16,16 +16,6 @@ public class Board {
         spawnRandomTile();
     }
 
-    private void testGrid() {
-        int x = 2;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++){
-                this.grid[i][j] =new Tile(x);
-                x = x*2;
-            }
-        }
-    }
-
     public void clearGrid() {
         this.grid = new Tile[SIZE][SIZE];
     }
@@ -61,13 +51,11 @@ public class Board {
             for (int c = 0; c < SIZE; c++)
                 before[r][c] = grid[r][c] == null ? 0 : grid[r][c].getValue();
 
-        int points;
-        switch (dir) {
-            case UP: points = moveUp(); break;
-            case DOWN: points = moveDown(); break;
-            case LEFT: points = moveLeft(); break;
-            case RIGHT: points = moveRight(); break;
-            default: points = 0; break;
+        int points = switch (dir) {
+            case UP -> moveUp();
+            case DOWN -> moveDown();
+            case LEFT -> moveLeft();
+            case RIGHT -> moveRight();
         };
 
         boolean moved = false;

@@ -34,8 +34,6 @@ public class InputHandler extends KeyAdapter {
                 default:
                     break;
             }
-        } else {
-            game.restart();
         }
         gamePanel.repaint();
     }

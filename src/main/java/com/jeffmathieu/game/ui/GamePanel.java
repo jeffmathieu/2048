@@ -12,6 +12,8 @@ public class GamePanel extends JPanel {
     private Board board;
     private JLabel score;
 
+    private boolean gameOverMessageShown = false;
+
     private static final int PADDING = 10;
     private static final int CELL_PADDING = 10;
 
@@ -73,14 +75,27 @@ public class GamePanel extends JPanel {
                 }
             }
         }
-        if(game.isGameOver()) {
+        if (game.isGameOver() && !gameOverMessageShown) {
+            gameOverMessageShown = true;
+
+            // schedule the freeze+dialog on the EDT *after* painting completes
             SwingUtilities.invokeLater(() -> {
+                // draw the final board one more time
+                this.paintImmediately(0, 0, getWidth(), getHeight());
+
+                // show the modal dialog (blocks here)
                 JOptionPane.showMessageDialog(
                         this,
-                        "Game Over!\nYour score: " + game.getScore() + ". Press enter to restart the game!",
+                        "Game Over!\nYour score: " + game.getScore(),
                         "2048",
                         JOptionPane.INFORMATION_MESSAGE
                 );
+
+                // now reset and repaint
+                game.restart();
+                score.setText("Score: 0");
+                gameOverMessageShown = false;
+                repaint();
             });
         }
     }
