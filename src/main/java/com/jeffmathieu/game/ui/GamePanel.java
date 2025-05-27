@@ -1,34 +1,50 @@
 package com.jeffmathieu.game.ui;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 
 import com.jeffmathieu.game.Board;
+import com.jeffmathieu.game.Game;
 import com.jeffmathieu.game.Tile;
 
 public class GamePanel extends JPanel {
+    private Game game;
     private Board board;
+    private JLabel score;
+
+    private boolean gameOverMessageShown = false;
 
     private static final int PADDING = 10;
     private static final int CELL_PADDING = 10;
-    private static final int PREF_SIZE = 500;
 
 
     public GamePanel() {
         setPreferredSize(new Dimension(400, 400));
-        board = new Board();
+
+        this.game = new Game();
+        this.board = game.getBoard();
+
+        score = new JLabel("Score: 0", SwingConstants.CENTER);
+        add(score, BorderLayout.NORTH);
+
         setFocusable(true);
-        addKeyListener(new InputHandler(board, this));
-        // CHANGE VARIABLE x TO CHANGE STARTING AMOUNT OF TILES.
-        int x = 2;
-        for(int i = 0; i < x; i++) {
-            board.spawnRandomTile();
-        }
+        addKeyListener(new InputHandler(game, this));
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        score.setText("Score: " + game.getScore());
+
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(new Color(0x9293AA));
         g2.fillRect(0, 0, getWidth(), getHeight());
@@ -66,6 +82,29 @@ public class GamePanel extends JPanel {
                     g2.drawString(s, tx, ty);
                 }
             }
+        }
+        if (game.isGameOver() && !gameOverMessageShown) {
+            gameOverMessageShown = true;
+
+            // schedule the freeze+dialog on the EDT *after* painting completes
+            SwingUtilities.invokeLater(() -> {
+                // draw the final board one more time
+                this.paintImmediately(0, 0, getWidth(), getHeight());
+
+                // show the modal dialog (blocks here)
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Game Over!\nYour score: " + game.getScore(),
+                        "2048",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+
+                // now reset and repaint
+                game.restart();
+                score.setText("Score: 0");
+                gameOverMessageShown = false;
+                repaint();
+            });
         }
     }
 

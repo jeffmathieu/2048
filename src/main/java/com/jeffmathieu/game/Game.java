@@ -5,10 +5,9 @@ public class Game {
     private int score;
 
     public Game() {
-        board = new Board();
-        score = 0;
-        board.spawnRandomTile();
-        board.spawnRandomTile();
+        this.board = new Board();
+        this.score = 0;
+        this.board.spawnRandomTile();
     }
 
     public Board getBoard() {
@@ -20,10 +19,18 @@ public class Game {
     }
 
     public void move(Direction dir) {
-        int gained = board.move(dir);
-        if (gained > 0) {
-            score += gained;
+        MoveResult res = board.move(dir);
+        if (res.isMoved()) {
+            score += res.getPointsGained();
             board.spawnRandomTile();
         }
+    }
+
+    public boolean isGameOver() {
+        return !board.hasAvailableMoves();
+    }
+
+    public void restart() {
+        board.restart();
     }
 }

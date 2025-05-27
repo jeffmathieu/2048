@@ -3,7 +3,7 @@ package com.jeffmathieu.game;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TileTest {
+public class TileTest {
 
     @Test
     public void testInit(){

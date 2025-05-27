@@ -1,5 +1,6 @@
 package com.jeffmathieu.game;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,19 +13,15 @@ public class Board {
 
     public Board() {
         this.grid = new Tile[SIZE][SIZE];
-        //testGrid();
         spawnRandomTile();
     }
 
-    private void testGrid() {
-        int x = 2;
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++){
-                this.grid[i][j] =new Tile(x);
-                x = x*2;
-            }
-        }
+    public void clearGrid() {
+        this.grid = new Tile[SIZE][SIZE];
+    }
 
+    public void setGrid(Tile[][] newGrid) {
+        this.grid = newGrid;
     }
 
     public Tile[][] getGrid() {
@@ -37,8 +34,8 @@ public class Board {
 
     public void spawnRandomTile() {
         List<int[]> empty = new ArrayList<>();
-        for (int r = 0; r < SIZE; r++) {
-            for (int c = 0; c < SIZE; c++) {
+        for (int r = 1; r < SIZE; r++) {
+            for (int c = 1; c < SIZE; c++) {
                 if (grid[r][c] == null) empty.add(new int[]{r, c});
             }
         }
@@ -48,18 +45,36 @@ public class Board {
         grid[rc[0]][rc[1]] = new Tile(val);
     }
 
-    public int move(Direction dir) {
-        switch (dir) {
-            case UP:    return moveUp();
-            case DOWN:  return moveDown();
-            case LEFT:  return moveLeft();
-            case RIGHT: return moveRight();
-            default:    return 0;
+    public MoveResult move(Direction dir) {
+        int[][] before = new int[SIZE][SIZE];
+        for (int r = 0; r < SIZE; r++)
+            for (int c = 0; c < SIZE; c++)
+                before[r][c] = grid[r][c] == null ? 0 : grid[r][c].getValue();
+
+        int points = switch (dir) {
+            case UP -> moveUp();
+            case DOWN -> moveDown();
+            case LEFT -> moveLeft();
+            case RIGHT -> moveRight();
+        };
+
+        boolean moved = false;
+        for (int r = 0; r < SIZE && !moved; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                int now = grid[r][c] == null ? 0 : grid[r][c].getValue();
+                if (before[r][c] != now) {
+                    moved = true;
+                    break;
+                }
+            }
         }
+
+        return new MoveResult(moved, points);
     }
 
     public int moveUp() {
         int gained = 0;
+
         for (int c = 0; c < SIZE; c++) {
             List<Integer> vals = new ArrayList<>();
             for (int r = 0; r < SIZE; r++) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -85,6 +100,7 @@ public class Board {
 
     public int moveDown() {
         int gained = 0;
+
         for (int c = 0; c < SIZE; c++) {
             List<Integer> vals = new ArrayList<>();
             for (int r = SIZE - 1; r >= 0; r--) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -110,6 +126,7 @@ public class Board {
 
     public int moveLeft() {
         int gained = 0;
+
         for (int r = 0; r < SIZE; r++) {
             List<Integer> vals = new ArrayList<>();
             for (int c = 0; c < SIZE; c++) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -135,6 +152,7 @@ public class Board {
 
     public int moveRight() {
         int gained = 0;
+
         for (int r = 0; r < SIZE; r++) {
             List<Integer> vals = new ArrayList<>();
             for (int c = SIZE - 1; c >= 0; c--) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -158,4 +176,31 @@ public class Board {
         return gained;
     }
 
+    public boolean hasAvailableMoves() {
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                if (grid[r][c] == null) {
+                    return true;
+                }
+            }
+        }
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
+                int v = grid[r][c].getValue();
+                if (c < SIZE - 1 && grid[r][c + 1].getValue() == v) {
+                    return true;
+                }
+                if (r < SIZE - 1 && grid[r + 1][c].getValue() == v) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void restart() {
+        clearGrid();
+        spawnRandomTile();
+        spawnRandomTile();
+    }
 }
