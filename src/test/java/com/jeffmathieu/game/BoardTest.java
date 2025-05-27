@@ -1,13 +1,20 @@
 package com.jeffmathieu.game;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
+    private Board board;
+
+    @BeforeEach
+    void setUp() {
+        board = new Board();
+    }
+
     @Test
     public void testInit() {
-        Board board = new Board();
         Tile[][] grid = board.getGrid();
         int length = grid.length;
         int width = grid[0].length;
@@ -24,9 +31,21 @@ public class BoardTest {
         board.setGrid(grid);
     }
 
+    private void setFalseGrid(Board board) {
+        board.clearGrid();
+        Tile[][] newGrid = new Tile[board.getSIZE()][board.getSIZE()];
+        int x = 2;
+        for (int i = 0; i < board.getSIZE(); i++) {
+            for (int j = 0; j < board.getSIZE(); j++){
+                newGrid[i][j] =new Tile(x);
+                x = x*2;
+            }
+        }
+        board.setGrid(newGrid);
+    }
+
     @Test
     public void testSetNewGrid() {
-        Board board = new Board();
         setNewGrid(board);
 
         assertEquals(2, board.getGrid()[0][0].getValue());
@@ -36,8 +55,12 @@ public class BoardTest {
 
     @Test
     public void testMoveLeft() {
-        Board board = new Board();
         setNewGrid(board);
+
+        board.move(Direction.LEFT);
+
+        assertEquals(4, board.getGrid()[0][0].getValue());
+        assertEquals(2, board.getGrid()[1][0].getValue());
 
         board.move(Direction.LEFT);
 
@@ -47,7 +70,6 @@ public class BoardTest {
 
     @Test
     public void testMoveRight() {
-        Board board = new Board();
         setNewGrid(board);
 
         board.move(Direction.RIGHT);
@@ -58,7 +80,6 @@ public class BoardTest {
 
     @Test
     public void testMoveUp() {
-        Board board = new Board();
         setNewGrid(board);
 
         board.move(Direction.UP);
@@ -69,7 +90,6 @@ public class BoardTest {
 
     @Test
     public void testMoveDown() {
-        Board board = new Board();
         setNewGrid(board);
 
         board.move(Direction.DOWN);
@@ -77,4 +97,26 @@ public class BoardTest {
         assertEquals(4, board.getGrid()[3][0].getValue());
         assertEquals(2, board.getGrid()[3][1].getValue());
     }
+
+    @Test
+    public void availableMovesTest() {
+        setNewGrid(board);
+        assertTrue(board.hasAvailableMoves());
+    }
+
+    @Test
+    public void noAvailableMovesTest() {
+        setFalseGrid(board);
+        assertFalse(board.hasAvailableMoves());
+    }
+
+    @Test
+    public void restartTest() {
+        setNewGrid(board);
+        assertEquals(2, board.getGrid()[0][0].getValue());
+        board.restart();
+        assertNull(board.getGrid()[0][0]);
+
+    }
+
 }

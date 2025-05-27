@@ -31,6 +31,14 @@ public class GamePanel extends JPanel {
         addKeyListener(new InputHandler(game, this));
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

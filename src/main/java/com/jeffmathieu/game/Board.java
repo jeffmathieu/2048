@@ -34,8 +34,8 @@ public class Board {
 
     public void spawnRandomTile() {
         List<int[]> empty = new ArrayList<>();
-        for (int r = 0; r < SIZE; r++) {
-            for (int c = 0; c < SIZE; c++) {
+        for (int r = 1; r < SIZE; r++) {
+            for (int c = 1; c < SIZE; c++) {
                 if (grid[r][c] == null) empty.add(new int[]{r, c});
             }
         }
