@@ -24,7 +24,14 @@ public class Board {
                 x = x*2;
             }
         }
+    }
 
+    public void clearGrid() {
+        this.grid = new Tile[SIZE][SIZE];
+    }
+
+    public void setGrid(Tile[][] newGrid) {
+        this.grid = newGrid;
     }
 
     public Tile[][] getGrid() {
@@ -49,13 +56,13 @@ public class Board {
     }
 
     public int move(Direction dir) {
-        switch (dir) {
-            case UP:    return moveUp();
-            case DOWN:  return moveDown();
-            case LEFT:  return moveLeft();
-            case RIGHT: return moveRight();
-            default:    return 0;
-        }
+        return switch (dir) {
+            case UP -> moveUp();
+            case DOWN -> moveDown();
+            case LEFT -> moveLeft();
+            case RIGHT -> moveRight();
+            default -> 0;
+        };
     }
 
     public int moveUp() {
