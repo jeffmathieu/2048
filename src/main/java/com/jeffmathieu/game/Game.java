@@ -8,7 +8,6 @@ public class Game {
         board = new Board();
         score = 0;
         board.spawnRandomTile();
-        board.spawnRandomTile();
     }
 
     public Board getBoard() {
@@ -23,7 +22,6 @@ public class Game {
         int gained = board.move(dir);
         if (gained > 0) {
             score += gained;
-            board.spawnRandomTile();
         }
     }
 }

@@ -67,6 +67,7 @@ public class Board {
 
     public int moveUp() {
         int gained = 0;
+
         for (int c = 0; c < SIZE; c++) {
             List<Integer> vals = new ArrayList<>();
             for (int r = 0; r < SIZE; r++) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -92,6 +93,7 @@ public class Board {
 
     public int moveDown() {
         int gained = 0;
+
         for (int c = 0; c < SIZE; c++) {
             List<Integer> vals = new ArrayList<>();
             for (int r = SIZE - 1; r >= 0; r--) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -117,6 +119,7 @@ public class Board {
 
     public int moveLeft() {
         int gained = 0;
+
         for (int r = 0; r < SIZE; r++) {
             List<Integer> vals = new ArrayList<>();
             for (int c = 0; c < SIZE; c++) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
@@ -142,6 +145,7 @@ public class Board {
 
     public int moveRight() {
         int gained = 0;
+
         for (int r = 0; r < SIZE; r++) {
             List<Integer> vals = new ArrayList<>();
             for (int c = SIZE - 1; c >= 0; c--) if (grid[r][c] != null) vals.add(grid[r][c].getValue());
