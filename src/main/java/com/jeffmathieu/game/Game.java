@@ -19,9 +19,10 @@ public class Game {
     }
 
     public void move(Direction dir) {
-        int gained = board.move(dir);
-        if (gained > 0) {
-            score += gained;
+        MoveResult res = board.move(dir);
+        if (res.isMoved()) {
+            score += res.getPointsGained();
+            board.spawnRandomTile();
         }
     }
 }
