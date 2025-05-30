@@ -3,7 +3,7 @@ package com.jeffmathieu.game;
 import java.io.*;
 
 public class Game {
-    //private static final String HIGHSCORE_FILE = "highscore.txt";
+    private static final String HIGHSCORE_FILE = System.getProperty("user.home") + "/.2048_highscore.txt";
     private Board board;
     private int score;
     private int highScore;
@@ -51,7 +51,7 @@ public class Game {
     }
 
     private int retrieveHighScore() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/highScore.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCORE_FILE))) {
             String line = reader.readLine();
             return line != null ? Integer.parseInt(line) : 0;
         } catch (IOException | NumberFormatException e) {
@@ -60,7 +60,7 @@ public class Game {
     }
 
     private void saveHighScore(int score) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/highScore.txt"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HIGHSCORE_FILE))) {
             writer.write(Integer.toString(score));
         } catch (IOException e) {
             // Handle error if needed

@@ -12,8 +12,8 @@ public class Board {
     private Random random = new Random();
 
     public Board() {
-        //this.grid = new Tile[SIZE][SIZE];
-        this.grid = testGrid(SIZE);
+        this.grid = new Tile[SIZE][SIZE];
+        //this.grid = testGrid(SIZE);
         spawnRandomTile();
     }
 

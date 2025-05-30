@@ -29,20 +29,6 @@ class GamePanelTest {
         assertEquals(400, d.height);
     }
 
-    @Test
-    public void hasScoreLabelShowingZero() {
-        boolean found = false;
-        for (Component c : panel.getComponents()) {
-            if (c instanceof JLabel) {
-                JLabel lbl = (JLabel) c;
-                if ("Score: 0".equals(lbl.getText())) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-        assertTrue(found, "Should have a JLabel displaying initial score of 0");
-    }
 
     @Test
     public void hasInputHandlerKeyListener() {

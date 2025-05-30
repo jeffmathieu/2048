@@ -55,6 +55,4 @@ public class GameTest {
         game.move(Direction.LEFT);
         assertTrue(game.isGameOver());
     }
-
-
 }
