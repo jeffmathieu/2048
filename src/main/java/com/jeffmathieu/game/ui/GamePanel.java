@@ -24,7 +24,7 @@ public class GamePanel extends JPanel {
         this.game = new Game();
         this.board = game.getBoard();
 
-        score = new JLabel("Score: 0", SwingConstants.CENTER);
+        score = new JLabel("HighScore: " + game.getHighScore(), SwingConstants.CENTER);
         add(score, BorderLayout.NORTH);
 
         setFocusable(true);
@@ -43,7 +43,7 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        score.setText("Score: " + game.getScore());
+        score.setText("Score: " + game.getScore() + " HighScore: " + game.getHighScore());
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(new Color(0x9293AA));
@@ -85,26 +85,43 @@ public class GamePanel extends JPanel {
         }
         if (game.isGameOver() && !gameOverMessageShown) {
             gameOverMessageShown = true;
+            if (game.getScore() > game.getHighScore()) {
+                SwingUtilities.invokeLater(() -> {
+                    this.paintImmediately(0, 0, getWidth(), getHeight());
 
-            // schedule the freeze+dialog on the EDT *after* painting completes
-            SwingUtilities.invokeLater(() -> {
-                // draw the final board one more time
-                this.paintImmediately(0, 0, getWidth(), getHeight());
 
-                // show the modal dialog (blocks here)
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Game Over!\nYour score: " + game.getScore(),
-                        "2048",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Congratulations!\nYour new High Score: " + game.getScore(),
+                            "Game Over!",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
 
-                // now reset and repaint
-                game.restart();
-                score.setText("Score: 0");
-                gameOverMessageShown = false;
-                repaint();
-            });
+                    // now reset and repaint
+                    game.restart();
+                    //score.setText("Score: 0");
+                    gameOverMessageShown = false;
+                    repaint();
+                });
+            } else {
+                SwingUtilities.invokeLater(() -> {
+                    this.paintImmediately(0, 0, getWidth(), getHeight());
+
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Game Over!\nYour score: " + game.getScore(),
+                            "Game Over!",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                    // now reset and repaint
+                    game.restart();
+                    //score.setText("Score: 0");
+                    gameOverMessageShown = false;
+                    repaint();
+                });
+            }
         }
     }
 

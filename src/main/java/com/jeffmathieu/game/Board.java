@@ -12,8 +12,23 @@ public class Board {
     private Random random = new Random();
 
     public Board() {
-        this.grid = new Tile[SIZE][SIZE];
+        //this.grid = new Tile[SIZE][SIZE];
+        this.grid = testGrid(SIZE);
         spawnRandomTile();
+    }
+
+    private Tile[][] testGrid(int size) {
+        Tile[][] newGrid = new Tile[size][size];
+        int x = 2;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++){
+                newGrid[i][j] =new Tile(x);
+                x = x*2;
+            }
+        }
+        newGrid[0][0].setValue(4);
+        newGrid[0][1].setValue(4);
+        return newGrid;
     }
 
     public void clearGrid() {
@@ -34,8 +49,8 @@ public class Board {
 
     public void spawnRandomTile() {
         List<int[]> empty = new ArrayList<>();
-        for (int r = 1; r < SIZE; r++) {
-            for (int c = 1; c < SIZE; c++) {
+        for (int r = 0; r < SIZE; r++) {
+            for (int c = 0; c < SIZE; c++) {
                 if (grid[r][c] == null) empty.add(new int[]{r, c});
             }
         }
